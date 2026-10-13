@@ -1,0 +1,13 @@
+data/
+third_party/
+.venv/
+runs/**/*.ply
+__pycache__/
+*.tgz
+
+# generated twin meshes (apt0_hd visual mesh is 153 MB, over GitHub's limit): rebuild with tools/export_gazebo.py
+gazebo/models/apt0/meshes/
+gazebo/models/apt0_hd/meshes/
+# datasets and caches
+rgbd_dataset_freiburg1_xyz/
+docs/figures/_jpg/

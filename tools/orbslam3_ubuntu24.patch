@@ -1,0 +1,101 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 016e743..700d8d6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,12 +14,12 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
+ 
+ # Check C++11 or C++0x support
+ include(CheckCXXCompilerFlag)
+-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
++CHECK_CXX_COMPILER_FLAG("-std=c++17" COMPILER_SUPPORTS_CXX11)
+ CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+ if(COMPILER_SUPPORTS_CXX11)
+-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
++   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    add_definitions(-DCOMPILEDWITHC11)
+-   message(STATUS "Using flag -std=c++11.")
++   message(STATUS "Using flag -std=c++17.")
+ elseif(COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+    add_definitions(-DCOMPILEDWITHC0X)
+diff --git a/Examples/RGB-D/rgbd_tum.cc b/Examples/RGB-D/rgbd_tum.cc
+index d420da5..e024718 100644
+--- a/Examples/RGB-D/rgbd_tum.cc
++++ b/Examples/RGB-D/rgbd_tum.cc
+@@ -59,7 +59,7 @@ int main(int argc, char **argv)
+     }
+ 
+     // Create SLAM system. It initializes all system threads and gets ready to process frames.
+-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::RGBD,true);
++    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::RGBD,getenv("ORB_NO_VIEWER")==nullptr);
+     float imageScale = SLAM.GetImageScale();
+ 
+     // Vector for tracking time statistics
+@@ -140,7 +140,8 @@ int main(int argc, char **argv)
+ 
+     // Save camera trajectory
+     SLAM.SaveTrajectoryTUM("CameraTrajectory.txt");
+-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");   
++    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
++    SLAM.SaveMapPoints("MapPoints.txt");   
+ 
+     return 0;
+ }
+diff --git a/include/LoopClosing.h b/include/LoopClosing.h
+index c9ccb26..7b6bfe0 100644
+--- a/include/LoopClosing.h
++++ b/include/LoopClosing.h
+@@ -223,7 +223,7 @@ protected:
+     bool mbFixScale;
+ 
+ 
+-    bool mnFullBAIdx;
++    int mnFullBAIdx;
+ 
+ 
+ 
+diff --git a/include/System.h b/include/System.h
+index 872c86e..818dbad 100644
+--- a/include/System.h
++++ b/include/System.h
+@@ -152,6 +152,9 @@ public:
+     // See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset
+     void SaveKeyFrameTrajectoryTUM(const string &filename);
+ 
++    // [vslam] export sparse map: one line per point "map_id x y z n_observations"
++    void SaveMapPoints(const string &filename);
++
+     void SaveTrajectoryEuRoC(const string &filename);
+     void SaveKeyFrameTrajectoryEuRoC(const string &filename);
+ 
+diff --git a/src/System.cc b/src/System.cc
+index 60d9c51..c5bd377 100644
+--- a/src/System.cc
++++ b/src/System.cc
+@@ -1547,3 +1547,26 @@ string System::CalculateCheckSum(string filename, int type)
+ 
+ } //namespace ORB_SLAM
+ 
++
++namespace ORB_SLAM3
++{
++// [vslam] export the sparse map of every map in the atlas
++void System::SaveMapPoints(const string &filename)
++{
++    ofstream f(filename.c_str());
++    f << fixed << setprecision(6);
++    for (Map* pMap : mpAtlas->GetAllMaps())
++    {
++        for (MapPoint* pMP : pMap->GetAllMapPoints())
++        {
++            if (!pMP || pMP->isBad())
++                continue;
++            Eigen::Vector3f p = pMP->GetWorldPos();
++            f << pMap->GetId() << " " << p(0) << " " << p(1) << " " << p(2) << " " << pMP->Observations() << "\n";
++        }
++    }
++    f.close();
++    cout << endl << "Map points saved to " << filename << endl;
++}
++
++} // namespace ORB_SLAM3

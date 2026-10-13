@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!--
+  scout_bot: small differential-drive robot (TurtleBot-sized) for the scanned apartment.
+  Footprint 0.30 x 0.24 m so it fits between furniture.
+
+  Topics
+    /cmd_vel                 gz.msgs.Twist      drive commands
+    /odom                    gz.msgs.Odometry   wheel odometry
+    /scan                    gz.msgs.LaserScan  360 deg 2D lidar, 10 Hz, 0.12-8 m
+    /camera/image            gz.msgs.Image      RGB 640x480, 15 Hz
+    /camera/depth_image      gz.msgs.Image      depth (m)
+    /camera/points           gz.msgs.PointCloudPacked
+    /imu                     gz.msgs.IMU        100 Hz
+    /model/scout_bot/pose    gz.msgs.Pose       ground-truth model pose, 100 Hz
+-->
+<sdf version="1.9">
+  <model name="scout_bot_tall">
+    <pose>0 0 0 0 0 0</pose>
+
+    <link name="base_link">
+      <pose>0 0 0.07 0 0 0</pose>
+      <inertial>
+        <mass>3.0</mass>
+        <inertia><ixx>0.017</ixx><iyy>0.025</iyy><izz>0.037</izz><ixy>0</ixy><ixz>0</ixz><iyz>0</iyz></inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry><box><size>0.30 0.24 0.08</size></box></geometry>
+      </collision>
+      <visual name="chassis">
+        <geometry><box><size>0.30 0.24 0.08</size></box></geometry>
+        <material><ambient>0.1 0.3 0.7 1</ambient><diffuse>0.1 0.3 0.7 1</diffuse><specular>0.3 0.3 0.3 1</specular></material>
+      </visual>
+      <visual name="lidar_mast">
+        <pose>0 0 0.07 0 0 0</pose>
+        <geometry><cylinder><radius>0.035</radius><length>0.06</length></cylinder></geometry>
+        <material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse></material>
+      </visual>
+      <visual name="camera_mast">
+        <pose>0.10 0 0.605 0 0 0</pose>
+        <geometry><cylinder><radius>0.012</radius><length>1.13</length></cylinder></geometry>
+        <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material>
+      </visual>
+      <visual name="camera_box">
+        <pose>0.11 0 1.13 0 0 0</pose>
+        <geometry><box><size>0.03 0.09 0.03</size></box></geometry>
+        <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+      </visual>
+
+      <sensor name="lidar" type="gpu_lidar">
+        <pose>0 0 0.10 0 0 0</pose>
+        <topic>scan</topic>
+        <update_rate>10</update_rate>
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <lidar>
+          <scan>
+            <horizontal><samples>360</samples><resolution>1</resolution>
+              <min_angle>-3.14159</min_angle><max_angle>3.14159</max_angle></horizontal>
+            <vertical><samples>1</samples><resolution>1</resolution><min_angle>0</min_angle><max_angle>0</max_angle></vertical>
+          </scan>
+          <range><min>0.12</min><max>8.0</max><resolution>0.01</resolution></range>
+          <noise><type>gaussian</type><mean>0</mean><stddev>0.01</stddev></noise>
+        </lidar>
+      </sensor>
+
+      <!-- camera on a tall mast: 1.20 m above the floor (model frame: 0.12 0 1.20), near the human scanner height -->
+      <sensor name="camera" type="rgbd_camera">
+        <pose>0.12 0 1.13 0 0 0</pose>
+        <topic>camera</topic>
+        <update_rate>15</update_rate>
+        <always_on>true</always_on>
+        <camera>
+          <horizontal_fov>1.047</horizontal_fov>
+          <image><width>640</width><height>480</height><format>R8G8B8</format></image>
+          <clip><near>0.1</near><far>8.0</far></clip>
+          <depth_camera><clip><near>0.1</near><far>8.0</far></clip></depth_camera>
+        </camera>
+      </sensor>
+
+      <sensor name="imu" type="imu">
+        <topic>imu</topic>
+        <update_rate>100</update_rate>
+        <always_on>true</always_on>
+      </sensor>
+    </link>
+
+    <link name="left_wheel">
+      <pose>0.05 0.14 0.05 -1.5708 0 0</pose>
+      <inertial><mass>0.3</mass>
+        <inertia><ixx>0.0002</ixx><iyy>0.0002</iyy><izz>0.0004</izz><ixy>0</ixy><ixz>0</ixz><iyz>0</iyz></inertia></inertial>
+      <collision name="collision"><geometry><cylinder><radius>0.05</radius><length>0.03</length></cylinder></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface></collision>
+      <visual name="visual"><geometry><cylinder><radius>0.05</radius><length>0.03</length></cylinder></geometry>
+        <material><ambient>0.15 0.15 0.15 1</ambient><diffuse>0.15 0.15 0.15 1</diffuse></material></visual>
+    </link>
+
+    <link name="right_wheel">
+      <pose>0.05 -0.14 0.05 -1.5708 0 0</pose>
+      <inertial><mass>0.3</mass>
+        <inertia><ixx>0.0002</ixx><iyy>0.0002</iyy><izz>0.0004</izz><ixy>0</ixy><ixz>0</ixz><iyz>0</iyz></inertia></inertial>
+      <collision name="collision"><geometry><cylinder><radius>0.05</radius><length>0.03</length></cylinder></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface></collision>
+      <visual name="visual"><geometry><cylinder><radius>0.05</radius><length>0.03</length></cylinder></geometry>
+        <material><ambient>0.15 0.15 0.15 1</ambient><diffuse>0.15 0.15 0.15 1</diffuse></material></visual>
+    </link>
+
+    <link name="caster">
+      <pose>-0.11 0 0.025 0 0 0</pose>
+      <inertial><mass>0.1</mass>
+        <inertia><ixx>0.00003</ixx><iyy>0.00003</iyy><izz>0.00003</izz><ixy>0</ixy><ixz>0</ixz><iyz>0</iyz></inertia></inertial>
+      <collision name="collision"><geometry><sphere><radius>0.025</radius></sphere></geometry>
+        <surface><friction><ode><mu>0.0</mu><mu2>0.0</mu2></ode></friction></surface></collision>
+      <visual name="visual"><geometry><sphere><radius>0.025</radius></sphere></geometry>
+        <material><ambient>0.3 0.3 0.3 1</ambient><diffuse>0.3 0.3 0.3 1</diffuse></material></visual>
+    </link>
+
+    <joint name="left_wheel_joint" type="revolute">
+      <parent>base_link</parent><child>left_wheel</child>
+      <axis><xyz>0 0 1</xyz><limit><lower>-1e16</lower><upper>1e16</upper></limit></axis>
+    </joint>
+    <joint name="right_wheel_joint" type="revolute">
+      <parent>base_link</parent><child>right_wheel</child>
+      <axis><xyz>0 0 1</xyz><limit><lower>-1e16</lower><upper>1e16</upper></limit></axis>
+    </joint>
+    <joint name="caster_joint" type="ball">
+      <parent>base_link</parent><child>caster</child>
+    </joint>
+
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>0.28</wheel_separation>
+      <wheel_radius>0.05</wheel_radius>
+      <max_linear_acceleration>1.0</max_linear_acceleration>
+      <max_angular_acceleration>3.0</max_angular_acceleration>
+      <topic>cmd_vel</topic>
+      <odom_topic>odom</odom_topic>
+      <frame_id>odom</frame_id>
+      <child_frame_id>base_link</child_frame_id>
+      <odom_publish_frequency>30</odom_publish_frequency>
+    </plugin>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher"/>
+    <!-- ground-truth model pose on /model/scout_bot/pose (sim-time stamped) -->
+    <plugin filename="gz-sim-pose-publisher-system" name="gz::sim::systems::PosePublisher">
+      <publish_link_pose>false</publish_link_pose>
+      <publish_model_pose>true</publish_model_pose>
+      <publish_nested_model_pose>true</publish_nested_model_pose>
+      <use_pose_vector_msg>false</use_pose_vector_msg>
+      <update_frequency>100</update_frequency>
+    </plugin>
+  </model>
+</sdf>

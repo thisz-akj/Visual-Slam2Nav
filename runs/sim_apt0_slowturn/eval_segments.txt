@@ -1,0 +1,9 @@
+run: runs/sim_apt0_slowturn
+frames 1478, GT path 17.02 m, tracking breaks: 5
+  segment     0-  274:   274 frames,  2.19 m, ATE  1.23 cm (0.56% of distance)
+  segment   274-  530:   256 frames,  2.38 m, ATE  1.41 cm (0.59% of distance)
+  segment   530-  692:   162 frames,  1.70 m, ATE  0.74 cm (0.44% of distance)
+  segment   692-  930:   238 frames,  2.72 m, ATE  2.06 cm (0.76% of distance)
+  segment   930- 1222:   292 frames,  2.93 m, ATE  0.82 cm (0.28% of distance)
+  segment  1222- 1478:   256 frames,  3.47 m, ATE  1.76 cm (0.51% of distance)
+longest continuous segment: 3.47 m (20% of the path)

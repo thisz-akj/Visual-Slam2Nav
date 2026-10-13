@@ -1,0 +1,7 @@
+run: runs/sim_apt0_tall
+frames 1169, GT path 15.40 m, tracking breaks: 3
+  segment     0-  178:   178 frames,  1.68 m, ATE  1.39 cm (0.83% of distance)
+  segment   178-  343:   165 frames,  1.69 m, ATE  0.78 cm (0.46% of distance)
+  segment   343-  781:   438 frames,  5.28 m, ATE 12.51 cm (2.37% of distance)
+  segment   781- 1169:   388 frames,  5.54 m, ATE  0.66 cm (0.12% of distance)
+longest continuous segment: 5.54 m (36% of the path)
