@@ -1,0 +1,57 @@
+SuperPoint+LightGlue RGB-D SLAM: 1172 frames (stride 1), data/sim_apt0_tall
+New map 0 at KF 0 (669 points with depth)
+[0/1172] KFs 1 maps 1 loops 0 merges 0 lost 0  201 ms/frame
+[100/1172] KFs 9 maps 1 loops 0 merges 0 lost 0  476 ms/frame
+[200/1172] KFs 29 maps 1 loops 0 merges 0 lost 0  441 ms/frame
+[300/1172] KFs 40 maps 1 loops 0 merges 0 lost 0  459 ms/frame
+[400/1172] KFs 50 maps 1 loops 0 merges 0 lost 0  526 ms/frame
+[500/1172] KFs 55 maps 1 loops 0 merges 0 lost 0  616 ms/frame
+[600/1172] KFs 61 maps 1 loops 0 merges 0 lost 0  662 ms/frame
+[700/1172] KFs 66 maps 1 loops 0 merges 0 lost 0  583 ms/frame
+Loop detected: KF 66 <-> KF 3 (114 inliers)
+  pose graph: 67 KFs, 162 edges, cost 23.2
+Loop detected: KF 67 <-> KF 2 (121 inliers)
+  pose graph: 68 KFs, 164 edges, cost 23.5
+Loop detected: KF 68 <-> KF 0 (128 inliers)
+  pose graph: 69 KFs, 166 edges, cost 23.8
+Loop detected: KF 69 <-> KF 0 (105 inliers)
+  pose graph: 70 KFs, 168 edges, cost 23.9
+Loop detected: KF 70 <-> KF 0 (69 inliers)
+  pose graph: 71 KFs, 171 edges, cost 25.2
+New map 1 at KF 75 (148 points with depth)
+Merge detected: map 1 -> map 0 via KF 77 <-> KF 51 (65 inliers)
+  pose graph: 78 KFs, 186 edges, cost 26.6
+Loop detected: KF 78 <-> KF 51 (66 inliers)
+  pose graph: 79 KFs, 188 edges, cost 27.2
+Loop detected: KF 79 <-> KF 52 (101 inliers)
+  pose graph: 80 KFs, 191 edges, cost 27.5
+Loop detected: KF 80 <-> KF 52 (92 inliers)
+  pose graph: 81 KFs, 195 edges, cost 29.3
+[800/1172] KFs 81 maps 2 loops 8 merges 1 lost 3  562 ms/frame
+Loop detected: KF 81 <-> KF 46 (81 inliers)
+  pose graph: 82 KFs, 199 edges, cost 29.8
+Loop detected: KF 82 <-> KF 46 (80 inliers)
+  pose graph: 83 KFs, 203 edges, cost 32.0
+Loop detected: KF 83 <-> KF 51 (208 inliers)
+  pose graph: 84 KFs, 207 edges, cost 32.8
+[900/1172] KFs 85 maps 2 loops 11 merges 1 lost 3  681 ms/frame
+[1000/1172] KFs 97 maps 2 loops 11 merges 1 lost 3  549 ms/frame
+Loop detected: KF 99 <-> KF 68 (49 inliers)
+  pose graph: 100 KFs, 254 edges, cost 36.3
+Loop detected: KF 100 <-> KF 68 (59 inliers)
+  pose graph: 101 KFs, 258 edges, cost 41.6
+Loop detected: KF 101 <-> KF 67 (164 inliers)
+  pose graph: 102 KFs, 262 edges, cost 43.1
+Loop detected: KF 102 <-> KF 67 (157 inliers)
+  pose graph: 103 KFs, 264 edges, cost 43.1
+[1100/1172] KFs 103 maps 2 loops 15 merges 1 lost 3  613 ms/frame
+Loop detected: KF 103 <-> KF 65 (143 inliers)
+  pose graph: 104 KFs, 266 edges, cost 43.5
+Loop detected: KF 104 <-> KF 4 (129 inliers)
+  pose graph: 105 KFs, 269 edges, cost 45.4
+Loop detected: KF 105 <-> KF 4 (103 inliers)
+  pose graph: 106 KFs, 273 edges, cost 60.2
+done: 1172 frames, tracked 1168, lost 3, relocalized 0, maps 2, KFs 106, loops 18, merges 1, LightGlue calls 1603
+median tracking time: 0.5388
+mean tracking time: 0.5612
+total 673 s

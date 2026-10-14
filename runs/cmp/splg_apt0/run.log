@@ -1,0 +1,219 @@
+SuperPoint+LightGlue RGB-D SLAM: 8560 frames (stride 1), /home/azad/github/visual_Slam2Nav/data/apt0/apt0
+New map 0 at KF 0 (450 points with depth)
+[0/8560] KFs 1 maps 1 loops 0 merges 0 lost 0  329 ms/frame
+[100/8560] KFs 19 maps 1 loops 0 merges 0 lost 0  504 ms/frame
+[200/8560] KFs 28 maps 1 loops 0 merges 0 lost 0  451 ms/frame
+[300/8560] KFs 43 maps 1 loops 0 merges 0 lost 0  523 ms/frame
+[400/8560] KFs 61 maps 1 loops 0 merges 0 lost 0  515 ms/frame
+[500/8560] KFs 75 maps 1 loops 0 merges 0 lost 0  474 ms/frame
+[600/8560] KFs 83 maps 1 loops 0 merges 0 lost 0  479 ms/frame
+[700/8560] KFs 103 maps 1 loops 0 merges 0 lost 0  582 ms/frame
+Loop detected: KF 103 <-> KF 77 (49 inliers)
+  pose graph: 104 KFs, 301 edges, cost 48.6
+Loop detected: KF 104 <-> KF 77 (49 inliers)
+  pose graph: 105 KFs, 305 edges, cost 50.4
+Loop detected: KF 105 <-> KF 77 (48 inliers)
+  pose graph: 106 KFs, 309 edges, cost 51.9
+Loop detected: KF 106 <-> KF 75 (50 inliers)
+  pose graph: 107 KFs, 313 edges, cost 53.4
+Loop detected: KF 107 <-> KF 75 (47 inliers)
+  pose graph: 108 KFs, 317 edges, cost 54.7
+Loop detected: KF 109 <-> KF 74 (56 inliers)
+  pose graph: 110 KFs, 324 edges, cost 56.0
+Loop detected: KF 110 <-> KF 75 (46 inliers)
+  pose graph: 111 KFs, 328 edges, cost 57.0
+Loop detected: KF 111 <-> KF 77 (82 inliers)
+  pose graph: 112 KFs, 332 edges, cost 59.1
+Loop detected: KF 112 <-> KF 77 (56 inliers)
+  pose graph: 113 KFs, 336 edges, cost 59.9
+Loop detected: KF 113 <-> KF 77 (66 inliers)
+  pose graph: 114 KFs, 340 edges, cost 60.9
+Loop detected: KF 114 <-> KF 78 (60 inliers)
+  pose graph: 115 KFs, 344 edges, cost 61.9
+Loop detected: KF 115 <-> KF 78 (52 inliers)
+  pose graph: 116 KFs, 348 edges, cost 63.7
+Loop detected: KF 116 <-> KF 78 (65 inliers)
+  pose graph: 117 KFs, 352 edges, cost 64.1
+Loop detected: KF 117 <-> KF 78 (71 inliers)
+  pose graph: 118 KFs, 356 edges, cost 65.0
+Loop detected: KF 124 <-> KF 30 (57 inliers)
+  pose graph: 125 KFs, 378 edges, cost 68.0
+Loop detected: KF 125 <-> KF 30 (83 inliers)
+  pose graph: 126 KFs, 382 edges, cost 68.4
+[800/8560] KFs 126 maps 1 loops 16 merges 0 lost 0  555 ms/frame
+Loop detected: KF 126 <-> KF 29 (59 inliers)
+  pose graph: 127 KFs, 386 edges, cost 70.0
+Loop detected: KF 127 <-> KF 30 (88 inliers)
+  pose graph: 128 KFs, 390 edges, cost 73.1
+Loop detected: KF 128 <-> KF 29 (109 inliers)
+  pose graph: 129 KFs, 394 edges, cost 74.0
+Loop detected: KF 129 <-> KF 29 (78 inliers)
+  pose graph: 130 KFs, 398 edges, cost 74.5
+Loop detected: KF 130 <-> KF 33 (137 inliers)
+  pose graph: 131 KFs, 402 edges, cost 76.7
+Loop detected: KF 131 <-> KF 30 (141 inliers)
+  pose graph: 132 KFs, 406 edges, cost 77.5
+Loop detected: KF 132 <-> KF 27 (126 inliers)
+  pose graph: 133 KFs, 410 edges, cost 78.5
+Loop detected: KF 133 <-> KF 27 (122 inliers)
+  pose graph: 134 KFs, 414 edges, cost 78.8
+Loop detected: KF 134 <-> KF 27 (93 inliers)
+  pose graph: 135 KFs, 418 edges, cost 78.9
+Loop detected: KF 135 <-> KF 26 (87 inliers)
+  pose graph: 136 KFs, 422 edges, cost 79.3
+Loop detected: KF 136 <-> KF 23 (109 inliers)
+  pose graph: 137 KFs, 426 edges, cost 79.5
+Loop detected: KF 137 <-> KF 23 (185 inliers)
+  pose graph: 138 KFs, 430 edges, cost 79.8
+Loop detected: KF 138 <-> KF 23 (124 inliers)
+  pose graph: 139 KFs, 434 edges, cost 80.0
+Loop detected: KF 139 <-> KF 13 (73 inliers)
+  pose graph: 140 KFs, 438 edges, cost 80.4
+[900/8560] KFs 140 maps 1 loops 30 merges 0 lost 0  491 ms/frame
+Loop detected: KF 140 <-> KF 13 (132 inliers)
+  pose graph: 141 KFs, 442 edges, cost 80.7
+Loop detected: KF 141 <-> KF 14 (189 inliers)
+  pose graph: 142 KFs, 446 edges, cost 80.9
+Loop detected: KF 142 <-> KF 15 (168 inliers)
+  pose graph: 143 KFs, 450 edges, cost 81.0
+Loop detected: KF 143 <-> KF 16 (144 inliers)
+  pose graph: 144 KFs, 454 edges, cost 81.0
+Loop detected: KF 144 <-> KF 17 (137 inliers)
+  pose graph: 145 KFs, 458 edges, cost 81.1
+Loop detected: KF 145 <-> KF 18 (125 inliers)
+  pose graph: 146 KFs, 462 edges, cost 81.4
+Loop detected: KF 146 <-> KF 18 (128 inliers)
+  pose graph: 147 KFs, 466 edges, cost 81.6
+Loop detected: KF 147 <-> KF 18 (89 inliers)
+  pose graph: 148 KFs, 470 edges, cost 81.6
+Loop detected: KF 148 <-> KF 18 (69 inliers)
+  pose graph: 149 KFs, 474 edges, cost 81.8
+Loop detected: KF 149 <-> KF 18 (53 inliers)
+  pose graph: 150 KFs, 478 edges, cost 82.3
+[1000/8560] KFs 169 maps 1 loops 40 merges 0 lost 0  493 ms/frame
+  relocalized against KF 156 (41 inliers)
+Loop detected: KF 175 <-> KF 148 (50 inliers)
+  pose graph: 176 KFs, 549 edges, cost 114.4
+Loop detected: KF 176 <-> KF 150 (70 inliers)
+  pose graph: 177 KFs, 553 edges, cost 115.7
+Loop detected: KF 177 <-> KF 151 (67 inliers)
+  pose graph: 178 KFs, 557 edges, cost 116.3
+Loop detected: KF 178 <-> KF 150 (65 inliers)
+  pose graph: 179 KFs, 561 edges, cost 117.4
+Loop detected: KF 179 <-> KF 150 (80 inliers)
+  pose graph: 180 KFs, 565 edges, cost 117.9
+Loop detected: KF 180 <-> KF 150 (65 inliers)
+  pose graph: 181 KFs, 569 edges, cost 119.3
+Loop detected: KF 181 <-> KF 150 (70 inliers)
+  pose graph: 182 KFs, 573 edges, cost 120.0
+Loop detected: KF 182 <-> KF 150 (63 inliers)
+  pose graph: 183 KFs, 577 edges, cost 120.6
+Loop detected: KF 183 <-> KF 150 (61 inliers)
+  pose graph: 184 KFs, 581 edges, cost 122.2
+Loop detected: KF 184 <-> KF 148 (105 inliers)
+  pose graph: 185 KFs, 585 edges, cost 122.9
+Loop detected: KF 185 <-> KF 150 (64 inliers)
+  pose graph: 186 KFs, 589 edges, cost 124.1
+Loop detected: KF 186 <-> KF 143 (72 inliers)
+  pose graph: 187 KFs, 593 edges, cost 124.3
+Loop detected: KF 187 <-> KF 143 (115 inliers)
+  pose graph: 188 KFs, 597 edges, cost 124.8
+Loop detected: KF 188 <-> KF 16 (97 inliers)
+  pose graph: 189 KFs, 601 edges, cost 125.0
+Loop detected: KF 189 <-> KF 145 (114 inliers)
+  pose graph: 190 KFs, 605 edges, cost 125.3
+Loop detected: KF 190 <-> KF 15 (187 inliers)
+  pose graph: 191 KFs, 609 edges, cost 125.5
+Loop detected: KF 191 <-> KF 14 (174 inliers)
+  pose graph: 192 KFs, 613 edges, cost 125.7
+Loop detected: KF 192 <-> KF 13 (164 inliers)
+  pose graph: 193 KFs, 617 edges, cost 126.3
+[1100/8560] KFs 193 maps 1 loops 58 merges 0 lost 32  515 ms/frame
+Loop detected: KF 193 <-> KF 11 (119 inliers)
+  pose graph: 194 KFs, 621 edges, cost 127.0
+Loop detected: KF 194 <-> KF 11 (102 inliers)
+  pose graph: 195 KFs, 625 edges, cost 128.5
+Loop detected: KF 195 <-> KF 13 (98 inliers)
+  pose graph: 196 KFs, 629 edges, cost 128.8
+Loop detected: KF 196 <-> KF 13 (93 inliers)
+  pose graph: 197 KFs, 633 edges, cost 131.1
+Loop detected: KF 197 <-> KF 13 (77 inliers)
+  pose graph: 198 KFs, 637 edges, cost 132.6
+Loop detected: KF 198 <-> KF 140 (56 inliers)
+  pose graph: 199 KFs, 641 edges, cost 137.0
+Loop detected: KF 199 <-> KF 8 (47 inliers)
+  pose graph: 200 KFs, 645 edges, cost 144.2
+Loop detected: KF 200 <-> KF 9 (46 inliers)
+  pose graph: 201 KFs, 649 edges, cost 146.4
+Loop detected: KF 201 <-> KF 9 (46 inliers)
+  pose graph: 202 KFs, 653 edges, cost 165.6
+Loop detected: KF 202 <-> KF 8 (49 inliers)
+  pose graph: 203 KFs, 657 edges, cost 168.6
+Loop detected: KF 206 <-> KF 9 (48 inliers)
+  pose graph: 207 KFs, 670 edges, cost 172.8
+[1200/8560] KFs 207 maps 1 loops 69 merges 0 lost 32  488 ms/frame
+[1300/8560] KFs 212 maps 1 loops 69 merges 0 lost 32  486 ms/frame
+[1400/8560] KFs 229 maps 1 loops 69 merges 0 lost 32  593 ms/frame
+[1500/8560] KFs 244 maps 1 loops 69 merges 0 lost 32  591 ms/frame
+Loop detected: KF 261 <-> KF 233 (65 inliers)
+  pose graph: 262 KFs, 836 edges, cost 199.8
+Loop detected: KF 262 <-> KF 234 (58 inliers)
+  pose graph: 263 KFs, 840 edges, cost 201.8
+Loop detected: KF 263 <-> KF 237 (82 inliers)
+  pose graph: 264 KFs, 844 edges, cost 203.6
+Loop detected: KF 264 <-> KF 237 (105 inliers)
+  pose graph: 265 KFs, 848 edges, cost 204.6
+Loop detected: KF 265 <-> KF 237 (97 inliers)
+  pose graph: 266 KFs, 852 edges, cost 205.6
+Loop detected: KF 266 <-> KF 237 (138 inliers)
+  pose graph: 267 KFs, 856 edges, cost 206.0
+Loop detected: KF 267 <-> KF 237 (103 inliers)
+  pose graph: 268 KFs, 860 edges, cost 206.8
+Loop detected: KF 268 <-> KF 242 (85 inliers)
+  pose graph: 269 KFs, 864 edges, cost 208.3
+Loop detected: KF 269 <-> KF 234 (111 inliers)
+  pose graph: 270 KFs, 868 edges, cost 209.7
+[1600/8560] KFs 270 maps 1 loops 78 merges 0 lost 32  1037 ms/frame
+Loop detected: KF 270 <-> KF 242 (70 inliers)
+  pose graph: 271 KFs, 872 edges, cost 210.9
+Loop detected: KF 271 <-> KF 237 (117 inliers)
+  pose graph: 272 KFs, 876 edges, cost 211.7
+Loop detected: KF 272 <-> KF 234 (133 inliers)
+  pose graph: 273 KFs, 880 edges, cost 212.1
+Loop detected: KF 273 <-> KF 239 (90 inliers)
+  pose graph: 274 KFs, 884 edges, cost 213.6
+Loop detected: KF 274 <-> KF 239 (68 inliers)
+  pose graph: 275 KFs, 888 edges, cost 221.1
+Loop detected: KF 275 <-> KF 236 (127 inliers)
+  pose graph: 276 KFs, 892 edges, cost 221.6
+Loop detected: KF 276 <-> KF 239 (51 inliers)
+  pose graph: 277 KFs, 896 edges, cost 223.6
+Loop detected: KF 277 <-> KF 236 (135 inliers)
+  pose graph: 278 KFs, 900 edges, cost 224.1
+Loop detected: KF 278 <-> KF 239 (64 inliers)
+  pose graph: 279 KFs, 904 edges, cost 225.6
+Loop detected: KF 279 <-> KF 239 (49 inliers)
+  pose graph: 280 KFs, 908 edges, cost 226.9
+Loop detected: KF 280 <-> KF 236 (82 inliers)
+  pose graph: 281 KFs, 912 edges, cost 227.3
+Loop detected: KF 281 <-> KF 232 (163 inliers)
+  pose graph: 282 KFs, 916 edges, cost 227.8
+Loop detected: KF 282 <-> KF 231 (259 inliers)
+  pose graph: 283 KFs, 920 edges, cost 228.0
+Loop detected: KF 283 <-> KF 230 (211 inliers)
+  pose graph: 284 KFs, 924 edges, cost 228.2
+Loop detected: KF 284 <-> KF 230 (231 inliers)
+  pose graph: 285 KFs, 928 edges, cost 228.4
+Loop detected: KF 285 <-> KF 232 (163 inliers)
+  pose graph: 286 KFs, 932 edges, cost 228.8
+Loop detected: KF 286 <-> KF 229 (157 inliers)
+  pose graph: 287 KFs, 936 edges, cost 229.1
+Loop detected: KF 287 <-> KF 234 (89 inliers)
+  pose graph: 288 KFs, 940 edges, cost 229.5
+Loop detected: KF 288 <-> KF 234 (80 inliers)
+  pose graph: 289 KFs, 944 edges, cost 230.3
+Loop detected: KF 289 <-> KF 234 (66 inliers)
+  pose graph: 290 KFs, 948 edges, cost 231.0
+Loop detected: KF 290 <-> KF 232 (52 inliers)
+  pose graph: 291 KFs, 952 edges, cost 236.8
+[1700/8560] KFs 292 maps 1 loops 99 merges 0 lost 32  605 ms/frame

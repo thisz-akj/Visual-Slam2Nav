@@ -503,11 +503,113 @@ def fig_nav_maps():
     save_plan(g, p, w, OUT / "sim_plan.png")
 
 
+# ------------------------------------------------------------------ pipeline 2 (SuperPoint + LightGlue)
+def fig_splg_arch():
+    fig, ax = canvas(11.5, 5.0)
+    ax.text(0.2, 4.75, "Every frame", fontsize=10, weight="bold", color=BLUE)
+    steps = [("RGB-D frame", "colour + depth"), ("SuperPoint", "learned keypoints\n+ descriptors"),
+             ("LightGlue", "match to the\nreference keyframe"), ("Lift to 3D", "keyframe depth\n-> 3D points"),
+             ("PnP + RANSAC", "camera pose")]
+    for i, (t, s_) in enumerate(steps):
+        x = 1.1 + i * 2.3
+        box(ax, x, 3.85, 2.0, 1.05, t, s_, fc=BLUE_T if 0 < i < 4 else "white", ec=BLUE, tsize=10.5)
+        if i:
+            arrow(ax, x - 2.3 + 1.0, 3.85, x - 1.0, 3.85, color=BLUE)
+    ax.text(0.2, 2.55, "Only when needed", fontsize=10, weight="bold", color=GREEN)
+    box(ax, 10.1, 1.55, 2.5, 1.15, "New keyframe?", "overlap low, or moved\n> 30 cm / 20 deg", fc=GREEN_T, ec=GREEN, tsize=10)
+    box(ax, 6.55, 1.55, 3.0, 1.15, "Loop / merge check", "similar old keyframes,\nverified by LightGlue + PnP", fc=GREEN_T, ec=GREEN, tsize=10)
+    box(ax, 2.35, 1.55, 3.1, 1.15, "Pose-graph optimization", "all keyframes adjusted\nto agree with every edge", fc=ORANGE_T, ec=ORANGE, tsize=10)
+    arrow(ax, 10.3, 3.32, 10.3, 2.13, "if yes", color=GREEN, off=(0.35, -0.1))
+    arrow(ax, 8.85, 1.55, 8.05, 1.55, color=GREEN)
+    arrow(ax, 5.05, 1.55, 3.9, 1.55, "loop found", color=ORANGE, off=(0, 0.12))
+    ax.text(5.75, 0.25, "Lost? relocalize against old keyframes; still lost after 3 frames: start a new map (merged later if recognised)",
+            ha="center", fontsize=9, color=RED)
+    save(fig, "splg_arch.png")
+
+
+def _lg_models():
+    import torch
+    from lightglue import LightGlue, SuperPoint
+    torch.set_num_threads(8)
+    return SuperPoint(max_num_keypoints=1024).eval(), LightGlue(features="superpoint").eval()
+
+
+def _lg_match(sp, lg, a, b):
+    import torch
+    from lightglue.utils import numpy_image_to_torch
+    with torch.inference_mode():
+        fa = sp.extract(numpy_image_to_torch(a[:, :, ::-1].copy()), resize=480)
+        fb = sp.extract(numpy_image_to_torch(b[:, :, ::-1].copy()), resize=480)
+        m = lg({"image0": fa, "image1": fb})["matches"][0].numpy()
+    return fa["keypoints"][0].numpy(), fb["keypoints"][0].numpy(), m
+
+
+def _side_by_side(a, b, ka, kb, pairs, color):
+    h, w = a.shape[:2]
+    im = np.hstack([a, b]).copy()
+    for i, j in pairs:
+        p, q = tuple(np.int32(ka[i])), tuple(np.int32(kb[j] + [w, 0]))
+        cv2.line(im, p, q, color, 1, cv2.LINE_AA)
+        cv2.circle(im, p, 3, color, -1, cv2.LINE_AA)
+        cv2.circle(im, q, 3, color, -1, cv2.LINE_AA)
+    return cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+
+
+def fig_splg_matches():
+    d = ROOT / "data/rgbd_dataset_freiburg3_long_office_household"
+    rows = open(ROOT / "third_party/ORB_SLAM3/Examples/RGB-D/associations/fr3_office.txt").readlines()
+    a = cv2.imread(str(d / rows[600].split()[1]))
+    b = cv2.imread(str(d / rows[615].split()[1]))
+    sp, lg = _lg_models()
+    ka, kb, m = _lg_match(sp, lg, a, b)
+    dots = a.copy()
+    for k in ka:
+        cv2.circle(dots, (int(k[0]), int(k[1])), 3, (255, 120, 40), -1, cv2.LINE_AA)
+    fig, axs = plt.subplots(2, 1, figsize=(9, 8.6), gridspec_kw={"height_ratios": [1, 0.62]})
+    axs[0].imshow(cv2.cvtColor(dots, cv2.COLOR_BGR2RGB))
+    axs[0].set_title(f"{len(ka)} SuperPoint keypoints: spread wider than ORB, including softer edges", fontsize=10)
+    axs[1].imshow(_side_by_side(a, b, ka, kb, m, (60, 200, 60)))
+    axs[1].set_title(f"LightGlue: {len(m)} matches to the frame half a second later (same pair as the ORB figure)", fontsize=10)
+    for x in axs:
+        x.axis("off")
+    save(fig, "splg_matches.png")
+
+
+def fig_orb_vs_splg_twin():
+    """Same blurry twin frame pair (run A, low camera): ORB matches vs LightGlue matches."""
+    d = ROOT / "data/sim_apt0_loop"
+    A = [l.split() for l in open(d / "associations.txt")]
+    i = int(0.155 * len(A))                      # just before one of ORB-SLAM3's tracking breaks
+    a, b = cv2.imread(str(d / A[i][1])), cv2.imread(str(d / A[i + 4][1]))
+    orb = cv2.ORB_create(1000)
+    ka, da = orb.detectAndCompute(cv2.cvtColor(a, cv2.COLOR_BGR2GRAY), None)
+    kb, db = orb.detectAndCompute(cv2.cvtColor(b, cv2.COLOR_BGR2GRAY), None)
+    good = []
+    if da is not None and db is not None:
+        for p in cv2.BFMatcher(cv2.NORM_HAMMING).knnMatch(da, db, k=2):
+            if len(p) == 2 and p[0].distance < 0.75 * p[1].distance:
+                good.append((p[0].queryIdx, p[0].trainIdx))
+    ko = np.float32([k.pt for k in ka]) if ka else np.zeros((0, 2))
+    kbo = np.float32([k.pt for k in kb]) if kb else np.zeros((0, 2))
+    sp, lg = _lg_models()
+    sa, sb, m = _lg_match(sp, lg, a, b)
+    fig, axs = plt.subplots(2, 1, figsize=(9, 7.4))
+    axs[0].imshow(_side_by_side(a, b, ko, kbo, good, (40, 140, 255)))
+    axs[0].set_title(f"ORB: {len(ka)} features, {len(good)} matches after the ratio test", fontsize=10)
+    axs[1].imshow(_side_by_side(a, b, sa, sb, m, (60, 200, 60)))
+    axs[1].set_title(f"SuperPoint + LightGlue: {len(sa)} keypoints, {len(m)} matches", fontsize=10)
+    for x in axs:
+        x.axis("off")
+    fig.suptitle("Same two frames from the blurry low-camera twin run (A), 0.27 s apart", fontsize=10.5)
+    save(fig, "orb_vs_splg_twin.png")
+
+
 if __name__ == "__main__":
     which = sys.argv[1:] or ["all"]
     fns = [fig_pipeline, fig_pinhole, fig_slam_idea, fig_orbslam_threads, fig_tsdf, fig_twin_steps,
            fig_gazebo_arch, fig_robot, fig_sim_experiment, fig_nav_loop, fig_pure_pursuit, fig_rgbd_frames,
-           fig_orb, copy_existing, fig_apt0_frame, fig_level, fig_sim_views, fig_results_chart, fig_nav_maps]
+           fig_orb, copy_existing, fig_apt0_frame, fig_level, fig_sim_views, fig_results_chart, fig_nav_maps,
+           fig_splg_arch, fig_splg_matches, fig_orb_vs_splg_twin]
     for f in fns:
         if "all" in which or f.__name__ in which:
             f()

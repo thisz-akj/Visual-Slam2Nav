@@ -11,3 +11,4 @@ gazebo/models/apt0_hd/meshes/
 # datasets and caches
 rgbd_dataset_freiburg1_xyz/
 docs/figures/_jpg/
+gazebo/models/apt0_splg/meshes/

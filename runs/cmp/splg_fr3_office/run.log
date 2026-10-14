@@ -1,0 +1,87 @@
+SuperPoint+LightGlue RGB-D SLAM: 1244 frames (stride 1), data/rgbd_dataset_freiburg3_long_office_household
+New map 0 at KF 0 (439 points with depth)
+[0/1244] KFs 1 maps 1 loops 0 merges 0 lost 0  187 ms/frame
+[100/1244] KFs 13 maps 1 loops 0 merges 0 lost 0  275 ms/frame
+[200/1244] KFs 29 maps 1 loops 0 merges 0 lost 0  319 ms/frame
+[300/1244] KFs 46 maps 1 loops 0 merges 0 lost 0  366 ms/frame
+[400/1244] KFs 66 maps 1 loops 0 merges 0 lost 0  444 ms/frame
+[500/1244] KFs 90 maps 1 loops 0 merges 0 lost 0  359 ms/frame
+Loop detected: KF 108 <-> KF 68 (52 inliers)
+  pose graph: 109 KFs, 322 edges, cost 45.1
+Loop detected: KF 109 <-> KF 68 (54 inliers)
+  pose graph: 110 KFs, 326 edges, cost 46.5
+Loop detected: KF 110 <-> KF 68 (45 inliers)
+  pose graph: 111 KFs, 330 edges, cost 47.8
+[600/1244] KFs 111 maps 1 loops 3 merges 0 lost 0  657 ms/frame
+Loop detected: KF 111 <-> KF 68 (52 inliers)
+  pose graph: 112 KFs, 334 edges, cost 49.1
+Loop detected: KF 116 <-> KF 67 (48 inliers)
+  pose graph: 117 KFs, 350 edges, cost 61.2
+[700/1244] KFs 140 maps 1 loops 5 merges 0 lost 0  553 ms/frame
+[800/1244] KFs 157 maps 1 loops 5 merges 0 lost 0  550 ms/frame
+[900/1244] KFs 175 maps 1 loops 5 merges 0 lost 0  403 ms/frame
+[1000/1244] KFs 197 maps 1 loops 5 merges 0 lost 0  388 ms/frame
+Loop detected: KF 213 <-> KF 6 (46 inliers)
+  pose graph: 214 KFs, 642 edges, cost 107.0
+Loop detected: KF 214 <-> KF 1 (82 inliers)
+  pose graph: 215 KFs, 646 edges, cost 109.3
+Loop detected: KF 215 <-> KF 9 (56 inliers)
+  pose graph: 216 KFs, 650 edges, cost 112.1
+Loop detected: KF 216 <-> KF 3 (155 inliers)
+  pose graph: 217 KFs, 654 edges, cost 113.4
+Loop detected: KF 217 <-> KF 4 (81 inliers)
+  pose graph: 218 KFs, 658 edges, cost 115.7
+Loop detected: KF 218 <-> KF 7 (126 inliers)
+  pose graph: 219 KFs, 662 edges, cost 119.3
+Loop detected: KF 219 <-> KF 7 (161 inliers)
+  pose graph: 220 KFs, 666 edges, cost 120.0
+Loop detected: KF 220 <-> KF 7 (175 inliers)
+  pose graph: 221 KFs, 670 edges, cost 120.6
+Loop detected: KF 221 <-> KF 5 (113 inliers)
+  pose graph: 222 KFs, 674 edges, cost 121.5
+[1100/1244] KFs 222 maps 1 loops 14 merges 0 lost 0  2327 ms/frame
+Loop detected: KF 222 <-> KF 7 (142 inliers)
+  pose graph: 223 KFs, 678 edges, cost 124.4
+Loop detected: KF 223 <-> KF 8 (83 inliers)
+  pose graph: 224 KFs, 682 edges, cost 126.1
+Loop detected: KF 224 <-> KF 7 (163 inliers)
+  pose graph: 225 KFs, 686 edges, cost 126.9
+Loop detected: KF 225 <-> KF 7 (100 inliers)
+  pose graph: 226 KFs, 690 edges, cost 129.6
+Loop detected: KF 226 <-> KF 7 (113 inliers)
+  pose graph: 227 KFs, 694 edges, cost 131.2
+Loop detected: KF 227 <-> KF 8 (143 inliers)
+  pose graph: 228 KFs, 698 edges, cost 131.8
+Loop detected: KF 228 <-> KF 9 (121 inliers)
+  pose graph: 229 KFs, 702 edges, cost 133.6
+Loop detected: KF 229 <-> KF 3 (46 inliers)
+  pose graph: 230 KFs, 706 edges, cost 134.9
+Loop detected: KF 230 <-> KF 8 (135 inliers)
+  pose graph: 231 KFs, 710 edges, cost 136.6
+Loop detected: KF 231 <-> KF 9 (183 inliers)
+  pose graph: 232 KFs, 714 edges, cost 136.9
+Loop detected: KF 232 <-> KF 9 (154 inliers)
+  pose graph: 233 KFs, 718 edges, cost 138.1
+Loop detected: KF 233 <-> KF 4 (53 inliers)
+  pose graph: 234 KFs, 722 edges, cost 141.0
+Loop detected: KF 234 <-> KF 9 (134 inliers)
+  pose graph: 235 KFs, 726 edges, cost 142.3
+Loop detected: KF 235 <-> KF 7 (143 inliers)
+  pose graph: 236 KFs, 730 edges, cost 143.2
+[1200/1244] KFs 236 maps 1 loops 28 merges 0 lost 0  2524 ms/frame
+Loop detected: KF 236 <-> KF 7 (132 inliers)
+  pose graph: 237 KFs, 734 edges, cost 144.2
+Loop detected: KF 237 <-> KF 4 (71 inliers)
+  pose graph: 238 KFs, 738 edges, cost 146.5
+Loop detected: KF 238 <-> KF 4 (66 inliers)
+  pose graph: 239 KFs, 742 edges, cost 147.2
+Loop detected: KF 239 <-> KF 9 (66 inliers)
+  pose graph: 240 KFs, 746 edges, cost 148.3
+Loop detected: KF 240 <-> KF 214 (193 inliers)
+  pose graph: 241 KFs, 750 edges, cost 148.7
+Loop detected: KF 241 <-> KF 214 (183 inliers)
+  pose graph: 242 KFs, 754 edges, cost 149.0
+done: 1244 frames, tracked 1243, lost 0, relocalized 0, maps 1, KFs 242, loops 34, merges 0, LightGlue calls 2473
+median tracking time: 0.2958
+mean tracking time: 0.8253
+total 1047 s

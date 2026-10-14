@@ -1,0 +1,5 @@
+run: /home/azad/github/visual_Slam2Nav/runs/cmp/orbslam3_apt0
+frames 4280, GT path 86.41 m, tracking breaks: 0
+  segment     0- 4280:  4280 frames, 86.41 m, ATE 10.75 cm (0.12% of distance)
+longest continuous segment: 86.41 m (100% of the path)
+global ATE (single map): 10.75 cm, max 76.81 cm

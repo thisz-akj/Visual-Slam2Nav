@@ -1,0 +1,40 @@
+SuperPoint+LightGlue RGB-D SLAM: 1311 frames (stride 1), data/sim_apt0_loop
+New map 0 at KF 0 (546 points with depth)
+[0/1311] KFs 1 maps 1 loops 0 merges 0 lost 0  193 ms/frame
+[100/1311] KFs 10 maps 1 loops 0 merges 0 lost 0  430 ms/frame
+[200/1311] KFs 43 maps 1 loops 0 merges 0 lost 1  430 ms/frame
+[300/1311] KFs 52 maps 1 loops 0 merges 0 lost 1  629 ms/frame
+[400/1311] KFs 68 maps 1 loops 0 merges 0 lost 1  445 ms/frame
+[500/1311] KFs 75 maps 1 loops 0 merges 0 lost 1  459 ms/frame
+[600/1311] KFs 82 maps 1 loops 0 merges 0 lost 1  364 ms/frame
+[700/1311] KFs 87 maps 1 loops 0 merges 0 lost 1  541 ms/frame
+[800/1311] KFs 108 maps 1 loops 0 merges 0 lost 1  539 ms/frame
+Loop detected: KF 118 <-> KF 74 (52 inliers)
+  pose graph: 119 KFs, 301 edges, cost 28.9
+[900/1311] KFs 120 maps 1 loops 1 merges 0 lost 1  518 ms/frame
+Loop detected: KF 120 <-> KF 74 (69 inliers)
+  pose graph: 121 KFs, 306 edges, cost 29.2
+Loop detected: KF 121 <-> KF 74 (86 inliers)
+  pose graph: 122 KFs, 309 edges, cost 29.6
+Loop detected: KF 123 <-> KF 75 (123 inliers)
+  pose graph: 124 KFs, 316 edges, cost 30.7
+Loop detected: KF 124 <-> KF 75 (137 inliers)
+  pose graph: 125 KFs, 320 edges, cost 31.0
+[1000/1311] KFs 126 maps 1 loops 5 merges 0 lost 1  489 ms/frame
+[1100/1311] KFs 145 maps 1 loops 5 merges 0 lost 1  458 ms/frame
+[1200/1311] KFs 153 maps 1 loops 5 merges 0 lost 1  565 ms/frame
+Loop detected: KF 154 <-> KF 7 (60 inliers)
+  pose graph: 155 KFs, 406 edges, cost 35.5
+Loop detected: KF 155 <-> KF 7 (67 inliers)
+  pose graph: 156 KFs, 408 edges, cost 36.3
+Loop detected: KF 156 <-> KF 10 (95 inliers)
+  pose graph: 157 KFs, 410 edges, cost 37.1
+Loop detected: KF 157 <-> KF 9 (130 inliers)
+  pose graph: 158 KFs, 413 edges, cost 37.5
+Loop detected: KF 158 <-> KF 9 (112 inliers)
+  pose graph: 159 KFs, 417 edges, cost 37.7
+[1300/1311] KFs 159 maps 1 loops 10 merges 0 lost 1  459 ms/frame
+done: 1311 frames, tracked 1309, lost 1, relocalized 0, maps 1, KFs 159, loops 10, merges 0, LightGlue calls 2104
+median tracking time: 0.4571
+mean tracking time: 0.4868
+total 654 s

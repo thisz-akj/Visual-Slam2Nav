@@ -1,0 +1,3 @@
+ATE SE(3) (metric, RGB-D): RMSE 10.75 cm, median 8.88 cm, max 76.81 cm, scale 1.0000
+ATE Sim(3): RMSE 7.40 cm, median 4.29 cm, max 79.11 cm, scale 0.9508
+frames evaluated: 4280   GT path length: 86.41 m

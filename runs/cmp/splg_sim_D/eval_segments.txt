@@ -1,0 +1,5 @@
+run: /home/azad/github/visual_Slam2Nav/runs/cmp/splg_sim_D
+frames 1170, GT path 15.83 m, tracking breaks: 0
+  segment     0- 1170:  1170 frames, 15.83 m, ATE  1.33 cm (0.08% of distance)
+longest continuous segment: 15.83 m (100% of the path)
+global ATE (single map): 1.33 cm, max 4.15 cm

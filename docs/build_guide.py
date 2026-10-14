@@ -62,6 +62,8 @@ S = {
     "boxh": ParagraphStyle("boxh", fontName="Sans-Bold", fontSize=9.5, leading=13, textColor=BLUE, spaceAfter=2),
     "cell": ParagraphStyle("cell", fontName="Sans", fontSize=8.8, leading=11.8, textColor=INK),
     "cellh": ParagraphStyle("cellh", fontName="Sans-Bold", fontSize=8.8, leading=11.8, textColor=INK),
+    "cellsm": ParagraphStyle("cellsm", fontName="Sans", fontSize=8.2, leading=10.6, textColor=INK),
+    "cellhsm": ParagraphStyle("cellhsm", fontName="Sans-Bold", fontSize=8.2, leading=10.6, textColor=INK),
     "code": ParagraphStyle("code", fontName="Mono", fontSize=8.3, leading=11.2, textColor=INK),
     "toc1": ParagraphStyle("toc1", fontName="Sans", fontSize=11, leading=19, textColor=INK),
     "title": ParagraphStyle("title", fontName="Sans-Bold", fontSize=28, leading=34, textColor=INK),
@@ -100,7 +102,8 @@ def lesson(text):
 
 
 PHOTOS = {"gz_hd_oblique.png", "gz_hd_top.png", "rgbd_frame.png", "orb_features.png", "apt0_frame.png",
-          "fr3_map_topdown.png", "apt0_map_topdown.png", "sim_views.png", "leveling.png"}
+          "fr3_map_topdown.png", "apt0_map_topdown.png", "sim_views.png", "leveling.png",
+          "splg_matches.png", "orb_vs_splg_twin.png", "gz_splg_top.png", "cmp_map_error_apt0.png"}
 
 
 def as_jpeg(path):
@@ -130,7 +133,8 @@ def figure(name, caption, width=1.0, max_h=None):
 
 
 def table(rows, widths, header=True, zebra=True, compact=False):
-    data = [[P(c, "cellh" if (header and i == 0) else "cell") for c in r] for i, r in enumerate(rows)]
+    cs, hs = ("cellsm", "cellhsm") if compact else ("cell", "cellh")
+    data = [[P(c, hs if (header and i == 0) else cs) for c in r] for i, r in enumerate(rows)]
     t = Table(data, colWidths=[TEXT_W * w for w in widths], repeatRows=1 if header else 0)
     pad = 2 if compact else 3.5
     st = [("GRID", (0, 0), (-1, -1), 0.4, RULE), ("VALIGN", (0, 0), (-1, -1), "TOP"),
@@ -210,7 +214,8 @@ def build():
     # ---------- cover
     st += [Spacer(1, 30 * mm), P("Visual SLAM to<br/>Autonomous Navigation", "title"), Spacer(1, 6),
            P("From real RGB-D video to a simulated apartment where a robot maps, is tested against "
-             "perfect ground truth, and drives itself.", "subtitle"), Spacer(1, 10 * mm),
+             "perfect ground truth, and drives itself. Two SLAM pipelines, compared: ORB-SLAM3 and "
+             "SuperPoint + LightGlue.", "subtitle"), Spacer(1, 10 * mm),
            figure("pipeline.png", "The whole project on one page: real video goes in at the top, a working "
                   "robot simulation comes out at the bottom."),
            Spacer(1, 6 * mm),
@@ -232,7 +237,8 @@ def build():
     st += [H1("1. The big picture"),
            callout("We took videos of real rooms, used them to build an accurate 3D copy of an apartment, put that "
                    "copy into a robot simulator, and then (a) tested how well a robot can map the room from its own "
-                   "camera, and (b) made the robot drive itself to any point you click."),
+                   "camera, and (b) made the robot drive itself to any point you click. We then built a second SLAM "
+                   "pipeline with learned features (SuperPoint + LightGlue) and compared the two."),
            P("The project has seven stages. Each one produces something the next stage uses:"),
            *numbered(["<b>Record</b>: colour + depth video from public datasets (TUM and Stanford BundleFusion).",
                       "<b>Localize</b>: ORB-SLAM3 works out where the camera was for every frame.",
@@ -250,6 +256,8 @@ def build():
                    ["ORB-SLAM3 on the real apartment scan (89 m)", "One continuous map; 9.7 cm vs reference"],
                    ["3D apartment model", "5.9 x 5.8 m, 1 cm detail, 1 million triangles, sharp colour texture"],
                    ["SLAM from the robot's camera in the simulator", "2.1 cm error over 15 m, never lost track"],
+                   ["Pipeline 2 (SuperPoint + LightGlue)", "Never lost the map on any of 6 sequences (ORB-SLAM3 "
+                                                            "broke on 3); about 30x slower on this CPU"],
                    ["Autonomous navigation", "Reaches clicked goals within about 10 cm; drives around a "
                                              "surprise box, or reports when the way is blocked"]],
                   [0.48, 0.52]),
@@ -565,9 +573,128 @@ gz sim -s -r --headless-rendering world.sdf   # run without a window (used for a
              "the simulator; using ORB-SLAM3 for this is the next step."),
            PageBreak()]
 
+    # ---------- 10 pipeline 2
+    st += [H1("10. A second SLAM: SuperPoint + LightGlue"),
+           callout("ORB features are hand-designed rules for finding corners. SuperPoint and LightGlue are neural "
+                   "networks that <i>learned</i> to find and match image points from huge numbers of examples. We "
+                   "built a second complete pipeline around them (pipeline 2) to see whether learned features fix the "
+                   "places where ORB-SLAM3 lost track."),
+           P("10.1 SuperPoint: learned keypoints", "h2"),
+           P("SuperPoint is a small convolutional neural network (CNN). One pass over the image produces two "
+             "things: a heat map of where good keypoints are, and a 256-number descriptor for every keypoint. It "
+             "was trained without manual labels: it learned which points stay recognisable when the same image is "
+             "warped, rotated and re-lit in many random ways. That is why it also finds usable points on softer "
+             "edges and gradients, not only on sharp corners like ORB."),
+           P("10.2 LightGlue: learned matching", "h2"),
+           P("ORB matching compares each descriptor on its own and keeps a match only if it clearly beats the "
+             "second-best (ratio test). LightGlue is a <b>transformer</b>: it looks at all keypoints of both images "
+             "together and lets them exchange information (<b>attention</b>), so a point is matched using the "
+             "context of its neighbours, like recognising a word from the sentence around it. It stops early when "
+             "the answer is already clear, which saves time on easy image pairs."),
+           figure("splg_matches.png", "SuperPoint keypoints and LightGlue matches on the same real frame pair as the "
+                  "ORB figure in chapter 2.", width=0.85),
+           P("10.3 How pipeline 2 works", "h2"),
+           P("ORB-SLAM3 is hard-wired to ORB (even its place-recognition vocabulary is built from ORB descriptors), "
+             "so SuperPoint cannot simply be plugged in. We wrote a new RGB-D SLAM in Python (folder "
+             "<font face='Mono'>splg_slam/</font>) with the same overall design, so the comparison is about the "
+             "features:"),
+           figure("splg_arch.png", "Pipeline 2: the per-frame tracking path (top) and the keyframe, loop and "
+                  "optimization steps (bottom)."),
+           *bullets(["<b>Tracking</b>: match the new frame to the current keyframe with LightGlue. The keyframe's "
+                     "matched points get 3D positions from its depth image, so PnP + RANSAC gives the new camera "
+                     "pose directly. If that fails, try the previous frame.",
+                     "<b>Keyframes</b>: a new keyframe when the overlap drops or the camera has moved more than 30 cm "
+                     "or turned more than 20\u00b0. Each new keyframe is also linked to up to two nearby older ones.",
+                     "<b>Loop closure</b>: candidate old keyframes are picked by overall image similarity and by "
+                     "distance, then checked with LightGlue + PnP (at least 45 agreeing matches).",
+                     "<b>Pose graph</b>: every link (\u201cedge\u201d) says how two keyframes are placed relative to "
+                     "each other. When a loop is found, all keyframe poses are adjusted together so they agree with "
+                     "every edge as well as possible. Frames are stored relative to their keyframe, so the whole "
+                     "path moves with the correction.",
+                     "<b>Lost and new maps</b>: if tracking fails, try to relocalize against old keyframes; after 3 "
+                     "failed frames start a new map, and merge it into the old one if a loop links them later "
+                     "(the same idea as ORB-SLAM3's Atlas)."]),
+           P("10.4 Making it fast enough on a laptop CPU", "h2"),
+           P("These networks are built for graphics cards; this laptop has none. Two measured tricks made pipeline 2 "
+             "usable at about 0.3 to 0.5 s per frame:"),
+           *table([["Setting", "SuperPoint time", "Why"],
+                   ["Full image (640 px), 14 threads", "about 1.6 s", "The CPU has 4 fast and 10 slow cores; using all slows it down"],
+                   ["Full image (640 px), 8 threads", "about 0.9 s", "Sweet spot for this CPU"],
+                   ["Image resized to 480 px, 8 threads", "about 0.2 s", "Much faster convolution kernels at this size; keypoints "
+                                                                           "are mapped back to full-resolution pixels"]],
+                  [0.34, 0.2, 0.46]),
+           P("10.5 From pipeline 2 to navigation", "h2"),
+           P("Pipeline 2 writes exactly the same files as ORB-SLAM3 (camera trajectory, keyframes, map points), so "
+             "every later step works unchanged: dense map, digital twin, Gazebo world and navigation. The apartment "
+             "map from pipeline 2 became its own Gazebo twin (<font face='Mono'>apt0_splg</font>). Its automatic "
+             "levelling and centring landed within 2 cm of the ORB-SLAM3 twin's, and the robot drove itself to two "
+             "test goals in it, arriving 11 to 12 cm from each."),
+           figure("gz_splg_top.png", "The apartment twin built from pipeline 2's poses, rendered in Gazebo (2 cm "
+                  "version). The robot is the small blue square.", width=0.75),
+           PageBreak()]
+
+    # ---------- 11 comparison
+    st += [H1("11. Comparing the two pipelines"),
+           callout("Both pipelines ran on exactly the same frames of six sequences. Pipeline 2 never lost the map; "
+                   "ORB-SLAM3 broke into 5 to 7 pieces on three of the four twin runs. On easy, well-textured real "
+                   "video ORB-SLAM3 was more accurate and about 30 times faster. The final 3D maps were equally good, "
+                   "and both drove the robot."),
+           P("11.1 A fair test", "h2"),
+           *bullets(["Same frames for both: every 2nd frame of the 30 Hz real videos, every frame of the 15 Hz twin "
+                     "recordings (folder <font face='Mono'>runs/cmp/assoc/</font>).",
+                     "Same scoring: the per-segment ATE tool from chapter 8; twin runs against exact Gazebo truth, the "
+                     "office against motion capture, the apartment against BundleFusion's poses.",
+                     "One command runs everything: <font face='Mono'>tools/compare_all.sh</font>, then "
+                     "<font face='Mono'>tools/compare_report.py</font> makes the tables and charts."]),
+           figure("cmp_summary.png", "Left: how much of each path was tracked without a break. Right: position "
+                  "error (hatched = ORB-SLAM3 broke into several maps; the bar is the average over the pieces)."),
+           P("11.2 Results", "h2"),
+           *table([["Dataset", "ORB-SLAM3", "SuperPoint + LightGlue"],
+                   ["Real office (motion capture)", "<b>1.56 cm</b>, 1 loop, 18 ms/frame", "2.66 cm, 34 loops, 296 ms/frame"],
+                   ["Twin A: camera 0.37 m", "5 breaks, longest 20%", "<b>0 breaks, 100%, 2.07 cm</b>"],
+                   ["Twin B: + slow turns", "6 breaks, longest 20%", "<b>0 breaks, 100%, 1.30 cm</b>"],
+                   ["Twin D: camera 1.2 m", "4 breaks (+2 merges), longest 36%", "<b>0 breaks, 100%, 1.33 cm</b>"],
+                   ["Twin C: camera 1.2 m + HD twin", "0 breaks, 2.75 cm", "0 breaks, <b>1.19 cm</b>"],
+                   ["Real apartment (reference poses)", "10.75 cm, worst 76.8 cm, 5 loops", "<b>8.29 cm, worst 17.2 cm</b>, 643 loops"]],
+                  [0.3, 0.34, 0.36]),
+           P("11.3 Why learned features held on", "h2"),
+           figure("orb_vs_splg_twin.png", "The same two blurry twin frames from run A, just before one of ORB-SLAM3's "
+                  "tracking breaks. ORB finds 51 matches, almost all along two edges; LightGlue finds 191, spread over "
+                  "the soft curtain folds.", width=0.85),
+           *bullets(["<b>Blurry, low-detail texture</b>: ORB needs sharp corners. SuperPoint still finds repeatable "
+                     "points on soft gradients, and LightGlue matches them using their context.",
+                     "<b>More, better-spread matches</b> give PnP a stable pose, so tracking never broke.",
+                     "<b>Much more loop closure</b>: 643 verified loops on the apartment against 5, which kept the worst "
+                     "error at 17 cm instead of 77 cm."]),
+           figure("cmp_traj_sim_A.png", "Twin run A. Left: ORB-SLAM3's path breaks into six pieces (red crosses; each "
+                  "piece aligned separately, which flatters it). Right: pipeline 2 keeps one map around the whole loop."),
+           figure("cmp_traj_fr3_office.png", "Real office video: both pipelines follow the motion-capture path; "
+                  "ORB-SLAM3 is a little more precise here (1.6 vs 2.7 cm)."),
+           P("11.4 Map quality", "h2"),
+           P("Each pipeline's poses were fused into a 2 cm apartment map and compared with a map fused from the "
+             "reference poses."),
+           *table([["Pipeline", "Mean surface error", "Map within 5 cm of reference", "Reference covered"],
+                   ["ORB-SLAM3", "5.55 cm", "59%", "63%"],
+                   ["SuperPoint + LightGlue", "5.63 cm", "57%", "59%"]],
+                  [0.3, 0.22, 0.26, 0.22]),
+           figure("cmp_map_error_apt0.png", "Top view of both apartment maps, coloured by distance to the reference "
+                  "surface (green = close, red = far). They are practically identical.", width=0.92),
+           lesson("A better trajectory did not give a better map. ORB-SLAM3's 77 cm error spike lasted only a few "
+                  "frames, and fusing thousands of depth images averaged it away. Always measure the thing you "
+                  "actually use (here, the map), not only the number that is easiest to compute."),
+           P("11.5 Honest caveats", "h2"),
+           *bullets(["Speed is not like-for-like: ORB-SLAM3 runs mapping and loop closing in parallel C++ threads; "
+                     "pipeline 2 runs everything in one Python thread, on a CPU instead of the GPU the networks were "
+                     "designed for.",
+                     "Pipeline 2's back end is simpler: it optimizes only keyframe poses, not the 3D points (no full "
+                     "bundle adjustment). That is the likely reason ORB-SLAM3 is more precise on the easy office video.",
+                     "Pipeline 2 is new code, tuned on just 200 office frames; ORB-SLAM3 is a mature, published system.",
+                     "SuperPoint's pretrained weights are licensed for non-commercial use only."]),
+           PageBreak()]
+
     # ---------- 10 problems
-    st += [H1("10. Problems we hit and how we fixed them"),
-           callout("Twenty problems came up. Most were ordinary (old code, library bugs). The most valuable ones "
+    st += [H1("12. Problems we hit and how we fixed them"),
+           callout("Twenty-four problems came up. Most were ordinary (old code, library bugs). The most valuable ones "
                    "were caught only because a number did not make physical sense."),
            *table([["#", "Problem (what we saw)", "Cause", "Fix"],
                    ["1", "Nothing would build", "No compiler or CMake installed; needed sudo", "Installed build tools from a normal terminal"],
@@ -589,7 +716,11 @@ gz sim -s -r --headless-rendering world.sdf   # run without a window (used for a
                    ["17", "Too-good result (confetti texture)", "Texture image read upside down by Gazebo", "Flipped it; marked the run INVALID and redid it"],
                    ["18", "Robot “arrived” at the wrong place", "Planner silently changed the goal", "Keep the real goal; report BLOCKED"],
                    ["19", "Gazebo crashed when navigation started", "OpenCV's Qt settings leaked into Gazebo", "Removed those settings for Gazebo"],
-                   ["20", "Our own shell commands died", "A kill command matched itself", "Used exact process names"]],
+                   ["20", "Our own shell commands died", "A kill command matched itself", "Used exact process names"],
+                   ["21", "SuperPoint took 1.6 s per image", "Hybrid CPU: slow cores dragged the fast ones down", "8 threads + 480 px images: 0.2 s"],
+                   ["22", "Pipeline 2 slowed to 2.3 s per frame", "Pose-graph cost computed edge by edge in Python", "Vectorized with NumPy; checked on a synthetic graph"],
+                   ["23", "One ORB-SLAM3 comparison run missing", "Camera-config path prefixed twice", "Resolved paths properly; re-ran after the batch"],
+                   ["24", "Robot world needed manual edits for each new twin", "Spawn point depends on the twin", "New tool: make_robot_world.py picks an open spot"]],
                   [0.05, 0.31, 0.32, 0.32]),
            P("Three lessons to keep", "h2"),
            *bullets(["<b>Sanity-check every number against the real world.</b> Negative camera height, a room 2.75 m "
@@ -601,8 +732,8 @@ gz sim -s -r --headless-rendering world.sdf   # run without a window (used for a
            PageBreak()]
 
     # ---------- 11 run
-    st += [H1("11. How to run everything"),
-           P("All commands run from <font face='Mono'>~/github/visual_slam</font>."),
+    st += [H1("13. How to run everything"),
+           P("All commands run from <font face='Mono'>~/github/visual_Slam2Nav</font>."),
            *code("""
 # 1. Build ORB-SLAM3 (once)
 tools/build_orbslam3.sh
@@ -635,20 +766,35 @@ tools/run_orbslam3.sh data/sim_run data/sim_run/associations.txt \\
 # 8. Click-to-go navigation
 .venv/bin/python tools/navigate.py
 """),
+           P("Pipeline 2 (SuperPoint + LightGlue) on the apartment", "h3"),
+           *code("""
+# SLAM + dense map (about 1 hour on this CPU; same arguments as run_orbslam3.sh, last one = frame stride)
+MAP_ARGS="--voxel 0.02 --depth-max 4 --every 2" tools/run_splg.sh \\
+    data/apt0/apt0 data/apt0/apt0/associations.txt data/apt0/apt0.yaml runs/splg_apt0 2
+
+# Gazebo twin + robot world, then click-to-go navigation
+.venv/bin/python tools/export_gazebo.py --run runs/splg_apt0 --name apt0_splg
+.venv/bin/python tools/make_robot_world.py --map apt0_splg
+.venv/bin/python tools/navigate.py --world apt0_splg_robot --map apt0_splg
+
+# Re-run the whole comparison (both pipelines, 6 sequences) and its report
+tools/compare_all.sh && .venv/bin/python tools/compare_report.py
+"""),
            *table([["Folder / file", "What it holds"],
                    ["tools/", "All pipeline scripts (build, run, map, export, collect, evaluate, navigate)"],
-                   ["gazebo/models/", "apt0, apt0_hd (apartment twins), scout_bot, scout_bot_tall (robots)"],
+                   ["splg_slam/", "Pipeline 2: SuperPoint + LightGlue front end, tracking, loops, pose graph"],
+                   ["gazebo/models/", "apt0, apt0_hd, apt0_splg (apartment twins), scout_bot, scout_bot_tall (robots)"],
                    ["gazebo/worlds/", "Worlds with and without the robot, normal and HD"],
                    ["data/", "Downloaded datasets and simulator recordings"],
                    ["runs/", "ORB-SLAM3 outputs, dense maps, evaluations"],
-                   ["results/REPORT.md", "Every result table"],
+                   ["results/REPORT.md, COMPARISON.md", "Every result table; pipeline 1 vs pipeline 2"],
                    ["docs/", "This guide, its figures and the scripts that make them"],
                    ["ROADMAP.md, labs/, vslam/", "The from-scratch learning course (Lab 0 is ready)"]],
                   [0.3, 0.7]),
            PageBreak()]
 
     # ---------- 12 next
-    st += [H1("12. What is next"),
+    st += [H1("14. What is next"),
            P("The project works end to end. These are the most valuable next steps, in order:"),
            *numbered(["<b>Save the work in git</b> as its own repository.",
                       "<b>Navigate using ORB-SLAM3</b> instead of the simulator's perfect position. This closes the "
@@ -657,14 +803,18 @@ tools/run_orbslam3.sh data/sim_run data/sim_run/associations.txt \\
                       "the simulator is not easier than reality.",
                       "<b>Test loop closure</b> with routes that revisit places.",
                       "<b>Move to ROS 2 + Nav2</b>, the standard robot navigation stack, using the same twin.",
-                      "<b>Finish the from-scratch labs</b> and compare your own SLAM against ORB-SLAM3 in the twin."]),
+                      "<b>Add local bundle adjustment to pipeline 2</b> (refine 3D points too), the likely fix for "
+                      "its lower precision on easy video.",
+                      "<b>Run pipeline 2 on a GPU</b>, where SuperPoint and LightGlue are designed to run.",
+                      "<b>Finish the from-scratch labs</b> and compare your own SLAM against both pipelines in the twin."]),
            Spacer(1, 6),
            P("Known limits today", "h2"),
            *bullets(["Navigation and test recording use the simulator's exact position.",
                      "The apartment twin is frozen: things that moved during the scan are fixed in place, and some "
                      "floating scan fragments remain.",
                      "The apartment's reference path is another system's estimate, not true ground truth.",
-                     "No loop closure fired on the apartment or in the simulator loops."]),
+                     "ORB-SLAM3 closed few loops on the apartment and none in the simulator loops; pipeline 2 closes "
+                     "many but is far slower on this CPU."]),
            PageBreak()]
 
     # ---------- glossary
@@ -672,7 +822,9 @@ tools/run_orbslam3.sh data/sim_run data/sim_run/associations.txt \\
           ["A* (A-star)", "A search method that finds the shortest path on a grid quickly"],
           ["ATE", "Absolute Trajectory Error: average distance between the estimated and true paths"],
           ["Bag of words", "Describing an image by which “visual words” (feature types) it contains, for fast place search"],
+          ["Attention / transformer", "A neural-network layer that lets every item look at all the others; LightGlue is built from these"],
           ["Bundle adjustment (BA)", "Adjusting all camera poses and 3D points together to reduce reprojection error"],
+          ["CNN", "Convolutional neural network: a network that slides small learned filters over an image"],
           ["Clearance / inflation", "Distance to the nearest obstacle; growing obstacles by the robot's radius"],
           ["Collision mesh", "Simplified shape used for physics (what the robot bumps into)"],
           ["Covisibility graph", "Links between keyframes that see the same map points"],
@@ -686,11 +838,14 @@ tools/run_orbslam3.sh data/sim_run data/sim_run/associations.txt \\
           ["gz-transport, topic", "Gazebo's messaging; a topic is a named channel such as /scan"],
           ["Intrinsics", "Camera numbers fx, fy, cx, cy that describe how 3D maps to pixels"],
           ["Keyframe", "A frame kept in the SLAM map because it shows something new"],
+          ["LightGlue", "Learned feature matcher (2023) that matches all keypoints of two images jointly"],
           ["Lidar", "A sensor that measures distances with laser beams in many directions"],
           ["Loop closure", "Recognising a previously visited place and correcting drift"],
           ["Marching cubes", "Turning a voxel distance field into a triangle mesh"],
           ["Mesh", "A 3D surface made of triangles"],
           ["Morton (Z-order) curve", "An ordering that keeps nearby 3D points near each other in a list"],
+          ["Map merging", "Joining two separate SLAM maps once a shared place is recognised"],
+          ["Pose graph", "Keyframe poses linked by measured relative poses; optimized to remove drift"],
           ["Pose", "Position + orientation (6 numbers)"],
           ["PnP", "Perspective-n-Point: computing the camera pose from known 3D points seen in an image"],
           ["Pure pursuit", "Steering towards a point a fixed distance ahead on the route"],
@@ -699,6 +854,7 @@ tools/run_orbslam3.sh data/sim_run data/sim_run/associations.txt \\
           ["RGB-D", "Colour (RGB) plus depth (D) camera"],
           ["SDF", "Simulation Description Format: Gazebo's XML files for worlds and models"],
           ["SLAM", "Simultaneous Localization And Mapping"],
+          ["SuperPoint", "Learned keypoint detector and descriptor (2018), a small CNN"],
           ["Texture / UV", "An image wrapped onto a mesh; UV says which image point goes on which surface point"],
           ["TSDF", "Truncated Signed Distance Function: voxels storing distance to the nearest surface"],
           ["Umeyama alignment", "Best rotation, shift (and scale) to line up two point sets"],

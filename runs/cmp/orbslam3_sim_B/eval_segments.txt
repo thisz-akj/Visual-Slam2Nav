@@ -1,0 +1,10 @@
+run: /home/azad/github/visual_Slam2Nav/runs/cmp/orbslam3_sim_B
+frames 1478, GT path 16.99 m, tracking breaks: 6
+  segment     0-  274:   274 frames,  2.07 m, ATE  1.40 cm (0.68% of distance)
+  segment   274-  506:   232 frames,  2.38 m, ATE  1.45 cm (0.61% of distance)
+  segment   506-  530:    24 frames,  0.00 m, ATE  0.00 cm (0.00% of distance)
+  segment   530-  692:   162 frames,  1.71 m, ATE  0.60 cm (0.35% of distance)
+  segment   692-  930:   238 frames,  2.72 m, ATE  2.03 cm (0.75% of distance)
+  segment   930- 1222:   292 frames,  2.93 m, ATE  0.91 cm (0.31% of distance)
+  segment  1222- 1478:   256 frames,  3.47 m, ATE  1.92 cm (0.55% of distance)
+longest continuous segment: 3.47 m (20% of the path)
